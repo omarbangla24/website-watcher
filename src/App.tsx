@@ -11,11 +11,13 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import usePageTracking from "./hooks/usePageTracking";
+import useBackendSEO from "./hooks/useBackendSEO";
 
 const queryClient = new QueryClient();
 
 const PageTracker = ({ children }: { children: React.ReactNode }) => {
   usePageTracking();
+  useBackendSEO();
   return <>{children}</>;
 };
 
