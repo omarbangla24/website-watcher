@@ -13,9 +13,10 @@ const Header = () => {
           </div>
           <span className="font-bold text-lg">StatusChecker</span>
         </Link>
-        <nav className="flex items-center gap-1">
+        <nav aria-label="Main navigation" className="flex items-center gap-1">
           <Link
             to="/"
+            aria-current={location.pathname === "/" ? "page" : undefined}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
               location.pathname === "/"
                 ? "bg-primary text-primary-foreground"
@@ -26,13 +27,14 @@ const Header = () => {
           </Link>
           <Link
             to="/recent"
+            aria-current={location.pathname === "/recent" ? "page" : undefined}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
               location.pathname === "/recent"
                 ? "bg-primary text-primary-foreground"
                 : "text-muted-foreground hover:text-foreground hover:bg-secondary"
             }`}
           >
-            <List className="h-3.5 w-3.5" />
+            <List className="h-3.5 w-3.5" aria-hidden="true" />
             Recent
           </Link>
         </nav>

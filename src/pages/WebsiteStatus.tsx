@@ -112,10 +112,11 @@ const WebsiteStatus = () => {
             {checks.length > 1 && (
               <section>
                 <h2 className="text-lg font-bold mb-3">Check History</h2>
-                <div className="space-y-2">
+                <div className="space-y-2" role="list" aria-label="Previous check results">
                   {checks.slice(1).map((check) => (
-                    <div
+                    <article
                       key={check.id}
+                      role="listitem"
                       className="flex items-center justify-between rounded-lg border border-border bg-card p-3 text-sm"
                     >
                       <div className="flex items-center gap-2">
@@ -131,10 +132,10 @@ const WebsiteStatus = () => {
                           {check.response_time_ms ?? "—"}ms
                         </span>
                       </div>
-                      <span className="text-xs text-muted-foreground">
+                      <time className="text-xs text-muted-foreground" dateTime={check.checked_at}>
                         {new Date(check.checked_at).toLocaleString()}
-                      </span>
-                    </div>
+                      </time>
+                    </article>
                   ))}
                 </div>
               </section>

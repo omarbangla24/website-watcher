@@ -97,7 +97,9 @@ const TopWebsites = () => {
   const domainToSlug = (d: string) => d.replace(/\./g, "-");
 
   return (
-    <section className="container mx-auto px-4 py-12">
+    <section className="container mx-auto px-4 py-12" aria-label="Top 10 website status monitor" itemScope itemType="https://schema.org/ItemList">
+      <meta itemProp="name" content="Top 10 Website Status" />
+      <meta itemProp="numberOfItems" content="10" />
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-extrabold">Top 10 Website Status</h2>
@@ -108,32 +110,39 @@ const TopWebsites = () => {
         <button
           onClick={checkAll}
           disabled={checkingAll}
+          aria-label="Refresh all website statuses"
           className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
         >
-          <RefreshCw className={`h-3.5 w-3.5 ${checkingAll ? "animate-spin" : ""}`} />
+          <RefreshCw className={`h-3.5 w-3.5 ${checkingAll ? "animate-spin" : ""}`} aria-hidden="true" />
           Refresh All
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {sites.map((site) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" role="list">
+        {sites.map((site, index) => (
           <Link
             key={site.domain}
             to={`/website/${domainToSlug(site.domain)}`}
             className="flex items-center justify-between rounded-xl border border-border bg-card p-4 hover:border-primary/30 transition-all group"
+            role="listitem"
+            itemScope
+            itemType="https://schema.org/ListItem"
+            aria-label={`${site.label} – ${site.status === "checking" ? "Checking" : site.status === "up" ? "Up" : site.status === "down" ? "Down" : "Not checked"}`}
           >
+            <meta itemProp="position" content={String(index + 1)} />
+            <meta itemProp="url" content={`https://${site.domain}`} />
             <div className="flex items-center gap-3">
               {site.status === "checking" ? (
-                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground shrink-0" />
+                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground shrink-0" aria-hidden="true" />
               ) : site.status === "up" ? (
-                <CheckCircle2 className="h-5 w-5 text-status-up shrink-0" />
+                <CheckCircle2 className="h-5 w-5 text-status-up shrink-0" aria-hidden="true" />
               ) : site.status === "down" ? (
-                <XCircle className="h-5 w-5 text-status-down shrink-0" />
+                <XCircle className="h-5 w-5 text-status-down shrink-0" aria-hidden="true" />
               ) : (
-                <div className="h-5 w-5 rounded-full border-2 border-border shrink-0" />
+                <div className="h-5 w-5 rounded-full border-2 border-border shrink-0" aria-hidden="true" />
               )}
               <div>
-                <p className="text-sm font-semibold group-hover:text-primary transition-colors">
+                <p className="text-sm font-semibold group-hover:text-primary transition-colors" itemProp="name">
                   {site.label}
                 </p>
                 <p className="text-xs text-muted-foreground font-mono">
@@ -143,7 +152,7 @@ const TopWebsites = () => {
             </div>
             <div className="flex items-center gap-3 shrink-0">
               {site.status === "checking" ? (
-                <span className="text-xs text-muted-foreground">Checking...</span>
+                <span className="text-xs text-muted-foreground" aria-live="polite">Checking...</span>
               ) : site.status !== "idle" ? (
                 <>
                   <span className="text-xs font-mono text-muted-foreground hidden sm:inline">
