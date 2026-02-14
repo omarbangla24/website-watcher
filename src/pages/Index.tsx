@@ -4,6 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import SEOHead from "@/components/SEOHead";
 import StatusResult from "@/components/StatusResult";
 import Header from "@/components/Header";
+import TopWebsites from "@/components/TopWebsites";
+import SEOFooterContent from "@/components/SEOFooterContent";
 
 interface CheckResult {
   id: string;
@@ -51,16 +53,17 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <SEOHead
-        title="Website Status Checker – Is Your Site Up?"
-        description="Instantly check if any website is up or down. Get HTTP status codes, response times, and real-time availability reports."
+        title="Website Status Checker – Is Facebook Down? Is YouTube Down?"
+        description="Free website status checker. Instantly check if Facebook, YouTube, Instagram, Twitter, WhatsApp, TikTok, Netflix, Amazon, Google or any website is down or up right now. Get HTTP status codes & response times."
         path="/"
         structuredData={{
           "@context": "https://schema.org",
           "@type": "WebApplication",
           name: "Website Status Checker",
-          description: "Check if any website is up or down instantly.",
+          description: "Check if Facebook, YouTube, Instagram, Twitter, WhatsApp or any website is down or up right now. Free real-time website downtime checker.",
           applicationCategory: "UtilityApplication",
           operatingSystem: "Web",
+          keywords: "is facebook down, is youtube down, is instagram down, website status checker, is it down, website down checker",
         }}
       />
       <Header />
@@ -141,10 +144,16 @@ const Index = () => {
             />
           )}
         </section>
+
+        {/* Top 10 Websites */}
+        <TopWebsites />
+
+        {/* SEO Content */}
+        <SEOFooterContent />
       </main>
 
       <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground">
-        <p>Website Status Checker — Check any site's availability instantly</p>
+        <p>Website Status Checker — Check if any website is down or up right now</p>
       </footer>
     </div>
   );
