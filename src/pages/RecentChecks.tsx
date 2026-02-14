@@ -89,8 +89,8 @@ const RecentChecks = () => {
                       <p className="font-mono text-sm font-medium truncate">
                         {check.domain}
                       </p>
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(check.checked_at).toLocaleString()}
+                    <p className="text-xs text-muted-foreground">
+                        <time dateTime={check.checked_at}>{new Date(check.checked_at).toLocaleString()}</time>
                       </p>
                     </div>
                   </div>

@@ -83,15 +83,20 @@ const Index = () => {
               e.preventDefault();
               handleCheck();
             }}
+            role="search"
+            aria-label="Check website status"
             className="max-w-xl mx-auto flex gap-2"
           >
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <label htmlFor="url-input" className="sr-only">Website URL</label>
               <input
+                id="url-input"
                 type="text"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="Enter a website URL (e.g. google.com)"
+                aria-label="Enter website URL to check status"
                 className="w-full rounded-xl border border-input bg-card pl-10 pr-4 py-3.5 text-sm font-mono placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
               />
             </div>

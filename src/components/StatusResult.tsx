@@ -38,19 +38,24 @@ ${errorMessage ? `Error: ${errorMessage}` : ""}`;
   };
 
   return (
-    <div
+    <article
+      aria-label={`Status of ${domain}: ${isUp ? "Up" : "Down"}`}
+      itemScope
+      itemType="https://schema.org/WebSite"
       className={`rounded-xl border-2 p-6 transition-all ${
         isUp
           ? "border-status-up/30 bg-status-up-bg"
           : "border-status-down/30 bg-status-down-bg"
       }`}
     >
+      <meta itemProp="name" content={domain} />
+      <meta itemProp="url" content={url} />
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           {isUp ? (
-            <CheckCircle2 className="h-10 w-10 text-status-up shrink-0" />
+            <CheckCircle2 className="h-10 w-10 text-status-up shrink-0" aria-hidden="true" />
           ) : (
-            <XCircle className="h-10 w-10 text-status-down shrink-0" />
+            <XCircle className="h-10 w-10 text-status-down shrink-0" aria-hidden="true" />
           )}
           <div>
             <h2 className="text-xl font-bold">
@@ -64,46 +69,48 @@ ${errorMessage ? `Error: ${errorMessage}` : ""}`;
         <button
           onClick={copyReport}
           className="shrink-0 rounded-lg border border-border bg-card p-2 text-muted-foreground hover:text-foreground transition-colors"
-          title="Copy status report"
+          aria-label="Copy status report to clipboard"
         >
-          {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+          {copied ? <Check className="h-4 w-4" aria-hidden="true" /> : <Copy className="h-4 w-4" aria-hidden="true" />}
         </button>
       </div>
 
-      <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <dl className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="flex items-center gap-2 rounded-lg bg-card/80 border border-border p-3">
-          <Globe className="h-4 w-4 text-muted-foreground" />
+          <Globe className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
           <div>
-            <p className="text-xs text-muted-foreground">HTTP Status</p>
-            <p className="font-mono font-semibold text-sm">
+            <dt className="text-xs text-muted-foreground">HTTP Status</dt>
+            <dd className="font-mono font-semibold text-sm">
               {statusCode ?? "N/A"}
-            </p>
+            </dd>
           </div>
         </div>
         <div className="flex items-center gap-2 rounded-lg bg-card/80 border border-border p-3">
-          <Clock className="h-4 w-4 text-muted-foreground" />
+          <Clock className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
           <div>
-            <p className="text-xs text-muted-foreground">Response Time</p>
-            <p className="font-mono font-semibold text-sm">{responseTimeMs}ms</p>
+            <dt className="text-xs text-muted-foreground">Response Time</dt>
+            <dd className="font-mono font-semibold text-sm">{responseTimeMs}ms</dd>
           </div>
         </div>
         <div className="flex items-center gap-2 rounded-lg bg-card/80 border border-border p-3">
-          <Clock className="h-4 w-4 text-muted-foreground" />
+          <Clock className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
           <div>
-            <p className="text-xs text-muted-foreground">Last Checked</p>
-            <p className="font-mono font-semibold text-sm">
-              {new Date(checkedAt).toLocaleTimeString()}
-            </p>
+            <dt className="text-xs text-muted-foreground">Last Checked</dt>
+            <dd className="font-mono font-semibold text-sm">
+              <time dateTime={checkedAt}>
+                {new Date(checkedAt).toLocaleTimeString()}
+              </time>
+            </dd>
           </div>
         </div>
-      </div>
+      </dl>
 
       {errorMessage && (
-        <p className="mt-3 text-sm text-status-down font-mono bg-card/50 rounded-lg p-2 border border-status-down/20">
+        <p className="mt-3 text-sm text-status-down font-mono bg-card/50 rounded-lg p-2 border border-status-down/20" role="alert">
           Error: {errorMessage}
         </p>
       )}
-    </div>
+    </article>
   );
 };
 
