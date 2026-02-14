@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { BarChart3, Globe, TrendingUp, LogOut, Loader2, Eye, Clock, ArrowUpRight } from "lucide-react";
+import { BarChart3, Globe, TrendingUp, LogOut, Loader2, Eye, Clock, ArrowUpRight, Settings } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
 import SEOHead from "@/components/SEOHead";
+import AdminSettings from "@/components/AdminSettings";
 
 interface AnalyticsSummary {
   totalPageViews: number;
@@ -162,7 +163,7 @@ const AdminDashboard = () => {
               { key: "dashboard", label: "Dashboard", icon: BarChart3 },
               { key: "pages", label: "Pages", icon: Eye },
               { key: "domains", label: "Domains", icon: Globe },
-              { key: "settings", label: "Settings", icon: Clock },
+              { key: "settings", label: "Settings", icon: Settings },
             ].map((tab) => (
               <button
                 key={tab.key}
@@ -256,28 +257,7 @@ const AdminDashboard = () => {
           </section>
         )}
 
-        {activeTab === "settings" && (
-          <section className="rounded-xl border border-border bg-card p-5">
-            <h2 className="text-sm font-bold mb-4">Settings</h2>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between py-2 border-b border-border">
-                <div>
-                  <p className="text-sm font-medium">Admin Email</p>
-                  <p className="text-xs text-muted-foreground">omarbangla24@gmail.com</p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between py-2 border-b border-border">
-                <div>
-                  <p className="text-sm font-medium">Site URL</p>
-                  <p className="text-xs text-muted-foreground">checksiteisonlinecom.lovable.app</p>
-                </div>
-                <a href="/" target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline flex items-center gap-1">
-                  Visit <ArrowUpRight className="h-3 w-3" />
-                </a>
-              </div>
-            </div>
-          </section>
-        )}
+        {activeTab === "settings" && <AdminSettings />}
       </main>
     </div>
   );
