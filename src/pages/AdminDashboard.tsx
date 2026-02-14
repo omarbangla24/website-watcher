@@ -19,6 +19,7 @@ interface AnalyticsSummary {
 const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<AnalyticsSummary | null>(null);
+  const [activeTab, setActiveTab] = useState("dashboard");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -145,7 +146,7 @@ const AdminDashboard = () => {
         <div className="container mx-auto flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
             <BarChart3 className="h-5 w-5 text-primary" aria-hidden="true" />
-            <span className="font-bold text-lg">Analytics Dashboard</span>
+            <span className="font-bold text-lg">Admin Panel</span>
           </div>
           <button
             onClick={handleLogout}
@@ -155,52 +156,78 @@ const AdminDashboard = () => {
             Logout
           </button>
         </div>
+        <div className="container mx-auto px-4">
+          <nav className="flex items-center gap-1 -mb-px">
+            {[
+              { key: "dashboard", label: "Dashboard", icon: BarChart3 },
+              { key: "pages", label: "Pages", icon: Eye },
+              { key: "domains", label: "Domains", icon: Globe },
+              { key: "settings", label: "Settings", icon: Clock },
+            ].map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === tab.key
+                    ? "border-primary text-primary"
+                    : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
+                }`}
+              >
+                <tab.icon className="h-4 w-4" aria-hidden="true" />
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+        </div>
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <StatCard icon={Eye} label="Total Page Views" value={data?.totalPageViews ?? 0} />
-          <StatCard icon={Eye} label="Today's Views" value={data?.todayPageViews ?? 0} />
-          <StatCard icon={Globe} label="Total Checks" value={data?.totalChecks ?? 0} />
-          <StatCard icon={TrendingUp} label="Today's Checks" value={data?.todayChecks ?? 0} />
-        </div>
+        {activeTab === "dashboard" && (
+          <>
+            {/* Stats Cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              <StatCard icon={Eye} label="Total Page Views" value={data?.totalPageViews ?? 0} />
+              <StatCard icon={Eye} label="Today's Views" value={data?.todayPageViews ?? 0} />
+              <StatCard icon={Globe} label="Total Checks" value={data?.totalChecks ?? 0} />
+              <StatCard icon={TrendingUp} label="Today's Checks" value={data?.todayChecks ?? 0} />
+            </div>
 
-        {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <section className="rounded-xl border border-border bg-card p-5">
-            <h2 className="text-sm font-bold mb-4">Page Views (Last 7 Days)</h2>
-            <ResponsiveContainer width="100%" height={250}>
-              <LineChart data={data?.dailyViews}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
-                <YAxis tick={{ fontSize: 11 }} />
-                <Tooltip />
-                <Line type="monotone" dataKey="views" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 3 }} />
-              </LineChart>
-            </ResponsiveContainer>
-          </section>
-          <section className="rounded-xl border border-border bg-card p-5">
-            <h2 className="text-sm font-bold mb-4">Website Checks (Last 7 Days)</h2>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={data?.dailyChecks}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
-                <YAxis tick={{ fontSize: 11 }} />
-                <Tooltip />
-                <Bar dataKey="checks" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </section>
-        </div>
+            {/* Charts */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+              <section className="rounded-xl border border-border bg-card p-5">
+                <h2 className="text-sm font-bold mb-4">Page Views (Last 7 Days)</h2>
+                <ResponsiveContainer width="100%" height={250}>
+                  <LineChart data={data?.dailyViews}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                    <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
+                    <YAxis tick={{ fontSize: 11 }} />
+                    <Tooltip />
+                    <Line type="monotone" dataKey="views" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 3 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </section>
+              <section className="rounded-xl border border-border bg-card p-5">
+                <h2 className="text-sm font-bold mb-4">Website Checks (Last 7 Days)</h2>
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart data={data?.dailyChecks}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                    <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
+                    <YAxis tick={{ fontSize: 11 }} />
+                    <Tooltip />
+                    <Bar dataKey="checks" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </section>
+            </div>
+          </>
+        )}
 
-        {/* Tables */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {activeTab === "pages" && (
           <section className="rounded-xl border border-border bg-card p-5">
-            <h2 className="text-sm font-bold mb-4">Top Pages</h2>
+            <h2 className="text-sm font-bold mb-4">Top Pages (Last 30 Days)</h2>
             <div className="space-y-2">
-              {data?.topPages.map((p, i) => (
-                <div key={p.path} className="flex items-center justify-between text-sm py-1.5 border-b border-border last:border-0">
+              {data?.topPages.map((p) => (
+                <div key={p.path} className="flex items-center justify-between text-sm py-2 border-b border-border last:border-0">
                   <span className="font-mono text-xs truncate max-w-[70%]">{p.path}</span>
                   <span className="text-muted-foreground font-mono text-xs">{p.count} views</span>
                 </div>
@@ -210,11 +237,14 @@ const AdminDashboard = () => {
               )}
             </div>
           </section>
+        )}
+
+        {activeTab === "domains" && (
           <section className="rounded-xl border border-border bg-card p-5">
-            <h2 className="text-sm font-bold mb-4">Most Checked Websites</h2>
+            <h2 className="text-sm font-bold mb-4">Most Checked Domains (Last 30 Days)</h2>
             <div className="space-y-2">
               {data?.topDomains.map((d) => (
-                <div key={d.domain} className="flex items-center justify-between text-sm py-1.5 border-b border-border last:border-0">
+                <div key={d.domain} className="flex items-center justify-between text-sm py-2 border-b border-border last:border-0">
                   <span className="font-mono text-xs">{d.domain}</span>
                   <span className="text-muted-foreground font-mono text-xs">{d.count} checks</span>
                 </div>
@@ -224,7 +254,30 @@ const AdminDashboard = () => {
               )}
             </div>
           </section>
-        </div>
+        )}
+
+        {activeTab === "settings" && (
+          <section className="rounded-xl border border-border bg-card p-5">
+            <h2 className="text-sm font-bold mb-4">Settings</h2>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between py-2 border-b border-border">
+                <div>
+                  <p className="text-sm font-medium">Admin Email</p>
+                  <p className="text-xs text-muted-foreground">omarbangla24@gmail.com</p>
+                </div>
+              </div>
+              <div className="flex items-center justify-between py-2 border-b border-border">
+                <div>
+                  <p className="text-sm font-medium">Site URL</p>
+                  <p className="text-xs text-muted-foreground">checksiteisonlinecom.lovable.app</p>
+                </div>
+                <a href="/" target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline flex items-center gap-1">
+                  Visit <ArrowUpRight className="h-3 w-3" />
+                </a>
+              </div>
+            </div>
+          </section>
+        )}
       </main>
     </div>
   );
